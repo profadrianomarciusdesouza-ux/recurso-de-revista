@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Processo do Trabalho: Recurso de Revista — Prof. Adriano Március de Souza</title>
+<link href="https://googleapis.com" rel="stylesheet">
+<style>
+ :root { --azul: #1a3a6e; --azul2: #2563eb; --azul3: #3b82f6; --ouro: #c9a84c; --ouro2: #f0c96a; --bg: #0d1b2a; --txt: #e8edf5; --txt2: #9db4cc; --verde: #22c55e; --verm: #ef4444; }
+ * { box-sizing: border-box; margin: 0; padding: 0; }
+ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--txt); height: 100vh; overflow: hidden; cursor: none; }
+ #cursor { width: 14px; height: 14px; border: 2px solid var(--ouro); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999; transition: transform .1s ease; mix-blend-mode: difference; }
+ #cursor.big { transform: scale(3); opacity: .5; }
+ #progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, var(--ouro), var(--azul3)); transition: width .4s ease; z-index: 100; width: 0%; }
+ .slide { display: none; position: absolute; inset: 0; flex-direction: column; justify-content: center; align-items: center; padding: 40px 60px; animation: slideIn .45s cubic-bezier(.22,1,.36,1); }
+ .slide.active { display: flex; }
+ @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+ .slide.capa { background: linear-gradient(145deg, #0a1628 0%, #112240 50%, #0d1b2a 100%); }
+ .slide.teoria { background: var(--bg); }
+ .slide.pratica { background: linear-gradient(145deg, #0a1a0e, #0d1b2a); }
+ .slide.alerta { background: linear-gradient(145deg, #1a0e0a, #0d1b2a); }
+ .badge { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 4px; color: var(--ouro); text-transform: uppercase; border: 1px solid rgba(201,168,76,.4); padding: 6px 18px; border-radius: 40px; margin-bottom: 20px; }
+ .capa-title { font-family: 'Playfair Display', serif; font-size: clamp(28px, 4vw, 45px); font-weight: 900; text-align: center; background: linear-gradient(135deg, #ffffff 30%, var(--ouro2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1.1; }
+ .author { font-size: 15px; color: var(--ouro); font-weight: 600; margin-top: 10px; }
+ .slide-header { text-align: center; margin-bottom: 20px; width: 100%; }
+ .slide-title { font-family: 'Playfair Display', serif; font-size: clamp(20px, 3vw, 28px); font-weight: 700; color: #fff; }
+ .card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 25px; width: 100%; max-width: 900px; backdrop-filter: blur(8px); }
+ .card h3 { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--ouro); margin-bottom: 10px; text-transform: uppercase; }
+ .card ul li { padding: 6px 0 6px 25px; position: relative; border-bottom: 1px solid rgba(255,255,255,.05); font-size: 14px; line-height: 1.4; list-style: none; }
+ .card ul li::before { content: '›'; position: absolute; left: 0; color: var(--ouro); font-size: 18px; }
+ .destaque { color: var(--ouro2); font-weight: 600; }
+ .questao-box { background: rgba(37,99,235,.08); border: 1px solid rgba(37,99,235,.25); border-radius: 16px; padding: 20px; width: 100%; max-width: 850px; }
+ .q-opcao { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 12px; cursor: pointer; font-size: 14px; width: 100%; text-align: left; margin-top: 10px; color: var(--txt2); transition: 0.2s; }
+ .q-opcao:hover { border-color: var(--azul3); color: #fff; }
+ .q-opcao.certa { border-color: var(--verde); color: var(--verde); }
+ .q-opcao.errada { border-color: var(--verm); color: var(--verm); }
+ #nav { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 12px; z-index: 200; background: rgba(13,27,42,0.9); padding: 10px 20px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.1); }
+ .nav-btn { background: none; border: 1px solid rgba(255,255,255,0.2); color: #fff; width: 34px; height: 34px; border-radius: 50%; cursor: pointer; font-size: 18px; }
+ #slide-counter { font-family: 'DM Mono', monospace; font-size: 11px; min-width: 80px; text-align: center; }
+</style>
+</head>
+<body>
+<div id="cursor"></div>
+<div id="progress-bar"></div>
+
+<!-- SLIDE 1 -->
+<div class="slide capa active">
+ <div class="badge">Processo do Trabalho · TST</div>
+ <div class="capa-title">Recurso de Revista (RR):<br>Domínio Técnico e Reforma</div>
+ <div class="author">Prof. Adriano Március de Souza</div>
+</div>
+
+<!-- SLIDE 2 -->
+<div class="slide pratica">
+ <div class="slide-header"><div class="slide-title">Provocação Inicial</div></div>
+ <div class="questao-box">
+ <p class="q-enunciado">O TST deve servir para reanalisar se uma testemunha mentiu ou para unificar a aplicação da lei no país?</p>
+ <button class="q-opcao" onclick="this.style.borderColor='var(--ouro)'">Para verificar a verdade dos fatos.</button>
+ <button class="q-opcao" onclick="this.style.borderColor='var(--ouro)'">Para garantir que a lei seja interpretada da mesma forma em todos os TRTs.</button>
+ </div>
+</div>
+
+<!-- SLIDE 3 -->
+<div class="slide teoria">
+ <div class="slide-header"><div class="slide-title">1. Natureza do Recurso</div></div>
+ <div class="card">
+ <h3>Recurso Extraordinário</h3>
+ <ul>
+ <li>Natureza de estrito direito: não admite discussão fática.</li>
+ <li><span class="destaque">Súmula 126 TST:</span> É o "muro" que impede o reexame de provas.</li>
+ <li>Busca a preservação do império da Lei Federal e da Constituição.</li>
+ </ul>
+ </div>
+</div>
+
+<!-- SLIDE 4 -->
+<div class="slide teoria">
+ <div class="slide-header"><div class="slide-num">Sessão 01</div><div class="slide-title">2. Hipóteses de Cabimento</div></div>
+ <div class="card">
+ <h3>Artigo 896 da CLT</h3>
+ <ul>
+ <li><strong>Alínea A:</strong> Divergência Jurisprudencial (TRTs diferentes).</li>
+ <li><strong>Alínea B:</strong> Divergência sobre lei estadual, convenção coletiva ou regulamento (fora da jurisdição do TRT).</li>
+ <li><strong>Alínea C:</strong> Violação direta da CF ou de Lei Federal.</li>
+ </ul>
+ </div>
+</div>
+
+<!-- SLIDE 5 -->
+<div class="slide alerta">
+ <div class="slide-header"><div class="slide-title">3. O Filtro da Transcendência</div></div>
+ <div class="card">
+ <h3>Art. 896-A (Reforma 2017)</h3>
+ <p>O TST só julga o que é <span class="destaque">relevante</span> social, econômica, política ou juridicamente.</p>
+ <ul>
+ <li><strong>Econômica:</strong> Elevado valor da causa.</li>
+ <li><strong>Política:</strong> Desrespeito do TRT às súmulas do TST/STF.</li>
+ <li><strong>Social:</strong> Direito social constitucional do reclamante.</li>
+ <li><strong>Jurídica:</strong> Interpretação de lei nova.</li>
+ </ul>
+ </div>
+</div>
+
+<!-- SLIDE 6 -->
+<div class="slide teoria">
+ <div class="slide-header"><div class="slide-title">4. Pressuposto: Prequestionamento</div></div>
+ <div class="card">
+ <h3>Súmula 297 TST</h3>
+ <ul>
+ <li>A matéria deve ter sido decidida explicitamente pelo TRT.</li>
+ <li>Se o TRT foi omisso, é <span class="destaque">obrigatória</span> a interposição de Embargos de Declaração.</li>
+ <li>Falta de prequestionamento mata o recurso na admissibilidade.</li>
+ </ul>
+ </div>
+</div>
+
+<!-- SLIDE 7 -->
+<div class="slide teoria">
+ <div class="slide-header"><div class="slide-title">5. Pressuposto: Dialeticidade</div></div>
+ <div class="card">
+ <h3>Súmula 422 TST</h3>
+ <ul>
+ <li>O recorrente deve atacar <span class="destaque">cada fundamento</span> do acórdão do TRT.</li>
+ <li>Não se admite "copiar e colar" o Recurso Ordinário.</li>
+ <li>A motivação deve ser específica e pertinente.</li>
+ </ul>
+ </div>
+</div>
+
+<!-- SLIDE 8 -->
+<div class="slide pratica">
+ <div class="slide-header"><div class="slide-title">Fixação 01</div></div>
+ <div class="questao-box">
+ <p class="q-enunciado">Se o advogado pede ao TST para reler a perícia médica e mudar a conclusão sobre o nexo causal, o recurso será:</p>
+ <button class="q-opcao" onclick="this.classList.add('errada')">Admitido, se houver transcendência econômica.</button>
+ <button class="q-opcao" onclick="this.classList.add('certa')">Rejeitado, pelo óbice da Súmula 126 (fatos e provas).</button>
+ </div>
+</div>
+
+<!-- SLIDE 9 -->
+<div class="slide teoria">
+ <div class="slide-header"><div class="slide-title">6. Rito Sumaríssimo (Art. 896, §9º)</div></div>
+ <div class="card">
+ <h3>Cabimento Restrito</h3>
+ <ul>
+ <li>Contrariedade a Súmula do TST.</li>
+ <li>Contrariedade a Súmula Vinculante do STF.</li>
+ <li>Violação direta da <span class="destaque">Constituição Federal</span>.</li>
+ <li><strong>Vedação:</strong> Não cabe por violação de Lei Federal ou OJ.</li>
+ </ul>
+ </div>
+</div>
+
+<!-- SLIDE 10 -->
+<div class="slide teoria">
+ <div class="slide-header"><div class="slide-title">7. Recurso de Revista na Execução</div></div>
+ <div class="card">
+ <h3>Art. 896, §2º da CLT</h3>
+ <ul>
+ <li>Regra de ouro: Apenas ofensa <span class="destaque">direta e literal</span> à Constituição.</li>
+ <li>Exceção: Execuções fiscais ou que envolvam a CNDT.</li>
+ <li>Súmula 266 TST: Confirma o rigor constitucional.</li>
+ </ul>
+ </div>
+</div>
+
+<!-- SLIDE 11 -->
+<div class="slide teoria">
+ <div class="slide-header"><div class="slide-title">8. Pressupostos Extrínsecos</div></div>
+ <div class="card">
+ <ul>
+ <li><strong>Prazo:</strong> 8 dias úteis.</li>
+ <li><strong>Preparo:</strong> Custas + Depósito Recursal (teto fixado pelo TST).</li>
+ <li><strong>Isenções:</strong> Beneficiários da justiça gratuita, massa falida, entes públicos.</li>
+ </ul>
+ </div>
+</div>
+
+<!-- SLIDE 12 -->
+<div class="slide teoria">
+ <div class="slide-header"><div class="slide-title">9. Depósito Recursal (Reforma 2017)</div></div>
+ <div class="card">
+ <ul>
+ <li>Entidades filantrópicas: Isentas.</li>
+ <li>Empresas em recuperação judicial: Isentas.</li>
+ <li>EPP, ME e entidades sem fins lucrativos: <span class="destaque">Metade do valor</span>.</li>
+ </ul>
+ </div>
+</div>
+
+<!-- SLIDE 13 -->
+<div class="slide teoria">
+ <div class="slide-header"><div class="slide-title">10. O Prequestionamento Ficto</div></div>
+ <div class="card">
+ <h3>Art. 896, §1º-A, VI</h3>
+ <ul>
+ <li>Inovação da Lei 13.015/14 e confirmada em 2017.</li>
+ <li>Se o TRT não se manifesta mesmo após EDs, a tese é considerada prequestionada.</li>
+ <li>Evita a "morte técnica" do recurso por omissão do tribunal regional.</li>
+ </ul>
+ </div>
+</div>
+<!-- SLIDE 14 -->
+<div class="slide teoria">
+ <div class="slide-header"><div class="slide-title">11. Demonstração Analítica</div></div>
+ <div class="card">
+ <h3>A Técnica do Confronto</h3>
+ <ul>
+ <li>Não basta citar a lei e o acórdão.</li>
+ <li>Deve-se transcrever o trecho exato do acórdão do TRT.</li>
+ <li>É obrigatório fazer o <span class="destaque">cotejo analítico</span>: explicar ponto a ponto por que aquele trecho viola a lei.</li>
+ </ul>
+ </div>
+</div>
+
+<!-- SLIDE 15 -->
+<div class="slide teoria">
+ <div class="slide-header"><div class="slide-title">12. Divergência Específica</div></div>
+ <div class="card">
+ <h3>Súmula 296 TST</h3>
+ <ul>
+ <li>Para o RR por divergência, os fatos devem ser idênticos.</li>
+ <li>Não basta tese jurídica genérica.</li>
+ <li>O "paradigma" (acórdão de outro TRT) deve enfrentar a mesma situação fática do "recorrido".</li>
+ </ul>
+ </div>
+</div>
+
+<!-- SLIDE 16 -->
+<div class="slide teoria">
+ <div class="slide-header"><div class="slide-title">13. Agravo de Instrumento (AIRR)</div></div>
+ <div class="card">
+ <h3>Destrancando o Recurso</h3>
+ <ul>
+ <li>Cabe quando o Presidente do TRT nega seguimento ao RR.</li>
+ <li>Objetivo: Fazer o TST reavaliar a admissibilidade.</li>
+ <li><span class="destaque">Depósito:</span> Deve-se garantir 50% do valor do depósito do recurso que se pretende destrancar.</li>
+ </ul>
+ </div>
+</div>
+
+<!-- SLIDE 17 -->
+<div class="slide alerta">
+ <div class="slide-header"><div class="slide-title">14. Irrecorribilidade da Transcendência</div></div>
+ <div class="card">
+ <h3>Art. 896-A, §4º da CLT</h3>
+ <ul>
+ <li>Se o Relator no TST nega transcendência em Agravo de Instrumento, acabou.</li>
+ <li>Essa decisão é <span class="destaque">irrecorrível</span> dentro do TST.</li>
+ <li>Filtro terminal para desafogar a Corte Superior.</li>
+ </ul>
+ </div>
+</div>
+
+<!-- SLIDE 18 -->
+<div class="slide teoria">
+ <div class="slide-header"><div class="slide-title">15. Efeitos do Recurso</div></div>
+ <div class="card">
+ <h3>Regra: Apenas Devolutivo</h3>
+ <ul>
+ <li>O RR não suspende a execução (ela prossegue de forma provisória).</li>
+ <li>Efeito suspensivo: Excepcional. Exige prova de dano irreparável.</li>
+ <li>Pedido deve ser feito via tutela cautelar antecedente ou incidental.</li>
+ </ul>
+ </div>
+</div>
+
+<!-- SLIDE 19 -->
+<div class="slide teoria">
+ <div class="slide-header"><div class="slide-title">16. Recursos Repetitivos</div></div>
+ <div class="card">
+ <h3>Art. 896-C da CLT</h3>
+ <ul>
+ <li>Quando há muitos recursos sobre o mesmo tema jurídico.</li>
+ <li>O TST fixa uma tese que vira <span class="destaque">Precedente Obrigatório</span>.</li>
+ <li>Os TRTs devem seguir a tese sob pena de Reclamação Constitucional.</li>
+ </ul>
+ </div>
+</div>
+
+<!-- SLIDE 20 -->
+<div class="slide teoria">
+ <div class="slide-header"><div class="slide-title">17. O Papel do Ministério Público</div></div>
+ <div class="card">
+ <ul>
+ <li>O MPT pode interpor RR em defesa da ordem jurídica ou interesses sociais.</li>
+ <li>Atua como *custos legis* em matérias de grande relevância coletiva.</li>
+ </ul>
+ </div>
+</div>
+
+<!-- SLIDE 21 -->
+<div class="slide pratica">
+ <div class="slide-header"><div class="slide-title">Fixação Final 01</div></div>
+ <div class="questao-box">
+ <p class="q-enunciado">Cabe Recurso de Revista contra decisão de juiz de 1ª Instância (Vara do Trabalho)?</p>
+ <button class="q-opcao" onclick="this.classList.add('errada')">Sim, se a matéria for constitucional.</button>
+ <button class="q-opcao" onclick="this.classList.add('certa')">Não. O RR ataca apenas acórdãos proferidos pelos TRTs.</button>
+ </div>
+</div>
+
+<!-- SLIDE 22 -->
+<div class="slide pratica">
+ <div class="slide-header"><div class="slide-title">Fixação Final 02</div></div>
+ <div class="questao-box">
+ <p class="q-enunciado">No Rito Sumaríssimo, a violação de uma OJ (Orientação Jurisprudencial) autoriza o RR?</p>
+ <button class="q-opcao" onclick="this.classList.add('errada')">Sim, pois OJ e Súmula têm o mesmo valor no TST.</button>
+ <button class="q-opcao" onclick="this.classList.add('certa')">Não. No sumaríssimo, apenas Súmula do TST, Súmula Vinculante e CF.</button>
+ </div>
+</div>
+
+<!-- SLIDE 23 -->
+<div class="slide alerta">
+ <div class="slide-header"><div class="slide-title">Resumo Estratégico</div></div>
+ <div class="card">
+ <h3>Checklist do Advogado</h3>
+ <ul>
+ <li>Prequestionou a tese no TRT?</li>
+ <li>Transcreveu o trecho do acórdão?</li>
+ <li>Fez o cotejo analítico?</li>
+ <li>Demonstrou a Transcendência?</li>
+ <li>Garantia do juízo (depósito) está ok?</li>
+ </ul>
+ </div>
+</div>
+
+<!-- SLIDE 24 -->
+<div class="slide teoria">
+ <div class="slide-header"><div class="slide-title">Conclusão Acadêmica</div></div>
+ <div class="card">
+ <p>O Recurso de Revista é a peça de maior complexidade técnica do Processo do Trabalho.</p>
+ <ul>
+ <li>A Reforma de 2017 tornou o TST uma <span class="destaque">Corte de Vértice</span>.</li>
+ <li>O rigor formal serve para garantir que apenas teses relevantes cheguem à cúpula.</li>
+ </ul>
+ </div>
+</div>
+
+<!-- SLIDE 25 -->
+<div class="slide capa">
+ <div class="capa-inner">
+ <div class="capa-title">Fim da Sessão</div>
+ <div class="author">Prof. Adriano Március de Souza</div>
+ <div class="badge">Obrigado pela Atenção!</div>
+ </div>
+</div>
+
+<!-- NAVEGAÇÃO -->
+<div id="nav">
+ <button class="nav-btn" onclick="prevSlide()">‹</button>
+ <span id="slide-counter">1 / 25</span>
+ <button class="nav-btn" onclick="nextSlide()">›</button>
+</div>
+
+<script>
+let current = 0;
+const slidesList = document.querySelectorAll(".slide");
+const totalSlides = slidesList.length;
+const counter = document.getElementById("slide-counter");
+const progressBar = document.getElementById("progress-bar");
+
+function showSlide(i) {
+ slidesList.forEach(s => s.classList.remove("active"));
+ slidesList[i].classList.add("active");
+ current = i;
+ counter.textContent = (current + 1) + " / " + totalSlides;
+ progressBar.style.width = ((current + 1) / totalSlides * 100) + "%";
+}
+
+function nextSlide() { if (current < totalSlides - 1) showSlide(current + 1); }
+function prevSlide() { if (current > 0) showSlide(current - 1); }
+
+document.addEventListener("keydown", e => {
+  switch(e.key){
+    case "ArrowRight": case "PageDown": case " ": nextSlide(); break;
+    case "ArrowLeft":  case "PageUp":             prevSlide(); break;
+  }
+});
+
+const cur = document.getElementById("cursor");
+document.addEventListener("mousemove", e => {
+  cur.style.left = e.clientX - 7 + "px";
+  cur.style.top  = e.clientY - 7 + "px";
+});
+document.addEventListener("mousedown", () => cur.classList.add("big"));
+document.addEventListener("mouseup",   () => cur.classList.remove("big"));
+
+window.onload = () => showSlide(0);
+</script>
+</body>
+</html>
